@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5ee">
+<title>오늘뭐먹지 | 10월 제철 장보기</title>
+<style>
+:root{--ink:#202b22;--muted:#68736a;--green:#315b3e;--lime:#d9ed9b;--paper:#f7f5ee;--card:#fffef9;--line:#e5e5d9;--orange:#d76b3e;--red:#c34f43;--shadow:0 12px 35px #2633230c}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.5}button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1120px;margin:auto;padding:0 22px}
+header{padding:23px 0 15px;border-bottom:1px solid var(--line)}.nav{display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{font-weight:900;font-size:23px;letter-spacing:-1.3px}.brand span{color:var(--orange)}.navnote{font-size:12px;color:var(--muted)}
+.hero{padding:35px 0 25px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--green);text-transform:uppercase}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.13;letter-spacing:-2px;margin:10px 0 14px}.hero h1 em{font-style:normal;color:var(--green)}.hero p{color:var(--muted);max-width:510px;margin:0}.hero-art{min-height:205px;border-radius:26px;background:#e8edda;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.produce{font-size:clamp(44px,7vw,78px);filter:drop-shadow(0 8px 7px #26332318);letter-spacing:2px}.art-tag{position:absolute;bottom:16px;left:18px;background:#fffef9d9;padding:7px 12px;border-radius:99px;font-size:12px;font-weight:800}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 14px}.section-title{font-size:22px;letter-spacing:-.7px;margin:0}.count{color:var(--muted);font-size:13px;margin-left:8px;font-weight:500}.search{position:relative;max-width:300px;width:100%}.search input{width:100%;padding:12px 15px 12px 40px;border:1px solid var(--line);border-radius:13px;background:var(--card);outline:none}.search input:focus{border-color:var(--green);box-shadow:0 0 0 3px #315b3e16}.search:before{content:"⌕";position:absolute;left:15px;top:7px;font-size:23px;color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.filter{border:1px solid var(--line);background:transparent;padding:9px 16px;border-radius:99px;color:var(--muted);font-weight:700;font-size:13px}.filter.active{background:var(--green);border-color:var(--green);color:white}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;padding-bottom:48px}.product{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .18s,box-shadow .18s;cursor:pointer}.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.thumb{height:135px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}.thumb small{position:absolute;top:12px;left:12px;background:#ffffffd9;padding:5px 9px;border-radius:99px;font-size:10px;font-weight:800;color:var(--green)}.product-body{padding:15px}.product h3{margin:0 0 3px;font-size:17px;letter-spacing:-.5px}.sub{font-size:12px;color:var(--muted)}.price-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-top:14px}.price{font-weight:900;font-size:20px;letter-spacing:-.7px}.unit{font-size:11px;color:var(--muted);font-weight:500}.change{font-size:12px;font-weight:800;color:var(--red);white-space:nowrap}.change.down{color:#287c53}.mini-line{height:25px;margin-top:10px}.mini-line svg{width:100%;height:100%;overflow:visible}.empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);background:var(--card);border-radius:18px}
+.note{border-top:1px solid var(--line);padding:20px 0 35px;color:var(--muted);font-size:12px}.note strong{color:var(--ink)}.modal-backdrop{position:fixed;inset:0;background:#18221dcc;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.show{display:flex}.modal{background:var(--card);width:min(580px,100%);max-height:90vh;overflow:auto;border-radius:24px;padding:24px;position:relative}.close{position:absolute;right:17px;top:14px;border:0;background:#eef0e8;border-radius:50%;width:36px;height:36px;font-size:22px}.modal-top{display:flex;gap:18px;align-items:center;padding-right:35px}.modal-emoji{width:110px;height:110px;border-radius:20px;display:grid;place-items:center;font-size:60px;flex-shrink:0}.modal h2{margin:0 0 5px;font-size:27px}.modal .bigprice{font-size:25px;font-weight:900;margin:8px 0}.pill{display:inline-block;border-radius:99px;background:#edf2e4;color:var(--green);font-size:11px;font-weight:800;padding:5px 9px}.modal h3{font-size:15px;margin:22px 0 8px}.chart{height:125px;background:#f2f3eb;border-radius:14px;padding:12px}.chart svg{width:100%;height:100%}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-box{padding:12px;background:#f4f4ec;border-radius:12px;font-size:13px}.detail-box b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}.detail-copy{font-size:13px;color:var(--muted)}
+@media(max-width:850px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{grid-template-columns:1fr .8fr}.thumb{height:120px}}
+@media(max-width:620px){.wrap{padding:0 16px}header{padding-top:17px}.navnote{display:none}.hero{grid-template-columns:1fr;padding-top:27px;gap:18px}.hero h1{font-size:39px}.hero-art{min-height:145px}.produce{font-size:58px}.toolbar{align-items:flex-start;flex-direction:column}.search{max-width:none}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.thumb{height:105px;font-size:52px}.product-body{padding:12px}.product h3{font-size:15px}.price{font-size:18px}.change{font-size:11px}.modal{padding:19px}.modal-top{gap:12px}.modal-emoji{width:82px;height:82px;font-size:46px}.modal h2{font-size:22px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="brand">오늘<span>뭐먹지</span> 🍊</div><div class="navnote">제철 장보기, 오늘 더 똑똑하게</div></div></header>
+<main class="wrap">
+<section class="hero">
+  <div><div class="eyebrow">OCTOBER · IN SEASON</div><h1>가을이 맛있어지는<br><em>10월 제철 장보기</em></h1><p>지금 맛있는 제철 농수산물과 가격 흐름을 한눈에 확인해 보세요. 오늘의 장보기에 작은 힌트가 되어줄 거예요.</p></div>
+  <div class="hero-art"><div class="produce">🍎 🍠 🦀</div><div class="art-tag">가을 제철 추천</div></div>
+</section>
+<section>
+  <div class="toolbar"><h2 class="section-title">이번 달 제철 상품 <span class="count" id="count"></span></h2><label class="search"><input id="search" type="search" placeholder="상품명 검색" aria-label="상품명 검색"></label></div>
+  <div class="api-panel" style="background:#fffef9;border:1px solid #e5e5d9;border-radius:18px;padding:16px;margin-bottom:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div><strong>실제 가격 데이터 연결</strong><div style="font-size:12px;color:#68736a;margin-top:3px">KAMIS 농수축산물 가격정보 Open API · 서울 소매가 기준</div></div>
+      <span id="apiBadge" style="font-size:12px;font-weight:800;color:#8a6a2e;background:#f7efd9;padding:6px 10px;border-radius:99px">API 키 설정 필요</span>
+    </div>
+    <details style="margin-top:12px">
+      <summary style="cursor:pointer;font-size:13px;font-weight:700;color:#315b3e">API 인증 정보 입력 및 가격 불러오기</summary>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:12px">
+        <label style="font-size:12px;color:#68736a">KAMIS 인증키 (cert_key)<input id="kamisKey" autocomplete="off" placeholder="발급받은 인증키" style="display:block;width:100%;padding:10px;border:1px solid #e5e5d9;border-radius:10px;margin-top:5px;background:white"></label>
+        <label style="font-size:12px;color:#68736a">KAMIS 요청자 ID (cert_id)<input id="kamisId" autocomplete="off" placeholder="발급받은 요청자 ID" style="display:block;width:100%;padding:10px;border:1px solid #e5e5d9;border-radius:10px;margin-top:5px;background:white"></label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button id="loadPrices" class="filter active" type="button">실제 가격 불러오기</button><button id="clearPrices" class="filter" type="button">연결 해제</button></div>
+      <p style="font-size:12px;color:#68736a;margin:10px 0 0">인증키는 이 화면에서만 사용하며 저장하지 않습니다. GitHub Pages의 공개 HTML에 인증키를 직접 넣지 마세요. API 제공처의 브라우저 요청 허용(CORS) 설정에 따라 직접 호출이 차단될 수 있습니다.</p>
+    </details>
+    <div id="apiMessage" role="status" style="font-size:12px;color:#68736a;margin-top:10px">현재는 예시 가격을 표시하고 있습니다. API 키를 발급받은 뒤 위에서 입력해 주세요.</div>
+  </div>
+  <div class="filters" role="group" aria-label="상품 카테고리">
+    <button class="filter active" data-filter="전체">전체 상품</button><button class="filter" data-filter="농산물">농산물</button><button class="filter" data-filter="수산물">수산물</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+<div class="note"><strong>가격 정보 안내</strong><br>이 MVP의 가격·변동률은 화면 구성과 기능 확인을 위한 예시 데이터입니다. 실제 시세가 아니며, 구매 전 판매처 가격을 확인해 주세요. 단위와 기준 가격은 상품별로 다를 수 있습니다.</div>
+</main>
+<div class="modal-backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><button class="close" id="close" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
+<script>
+const products=[
+{id:1,name:"사과",category:"농산물",emoji:"🍎",color:"#f8e3d9",kind:"홍로 · 가을 대표 과일",price:9800,unit:"1kg",change:-6.4,season:"9–11월",tip:"껍질에 탄력이 있고 묵직한 것을 고르세요. 서늘한 곳에 보관하고 다른 과일과 분리하면 좋아요.",prices:[11200,10900,10400,10100,9800]},
+{id:2,name:"배",category:"농산물",emoji:"🍐",color:"#f0ebce",kind:"달콤하고 과즙 많은 과일",price:7900,unit:"1kg",change:3.2,season:"9–11월",tip:"껍질이 팽팽하고 상처가 적은 것을 고르세요. 먹기 전 차게 두면 단맛이 더 잘 느껴져요.",prices:[7400,7600,7500,7700,7900]},
+{id:3,name:"고구마",category:"농산물",emoji:"🍠",color:"#f4e2d3",kind:"든든한 가을 뿌리채소",price:4200,unit:"1kg",change:-2.1,season:"9–11월",tip:"표면이 매끈하고 단단하며 상처가 적은 것이 좋아요. 추위에 약하므로 너무 차갑지 않은 곳에 보관하세요.",prices:[4500,4400,4300,4290,4200]},
+{id:4,name:"밤",category:"농산물",emoji:"🌰",color:"#e9dfd2",kind:"고소한 가을 간식",price:6500,unit:"1kg",change:5.8,season:"9–11월",tip:"껍질에 윤기가 있고 손에 들었을 때 묵직한 밤을 고르세요. 냉장 보관하면 신선도를 유지하는 데 도움이 됩니다.",prices:[5900,6100,6200,6350,6500]},
+{id:5,name:"무",category:"농산물",emoji:"🥬",color:"#e5edd9",kind:"국·무침에 두루 쓰이는 채소",price:2300,unit:"1개",change:-4.0,season:"10–12월",tip:"들었을 때 묵직하고 표면이 매끈한 것을 고르세요. 잎이 있다면 잎과 뿌리를 분리해 보관하세요.",prices:[2500,2450,2400,2350,2300]},
+{id:6,name:"굴",category:"수산물",emoji:"🦪",color:"#e2e9e7",kind:"바다의 우유 · 제철 시작",price:12500,unit:"300g",change:8.5,season:"10–2월",tip:"냉장 유통 제품을 선택하고 표시된 소비기한과 보관 방법을 확인하세요. 생식보다 충분히 익혀 먹는 편이 안전합니다.",prices:[10800,11200,11500,12000,12500]},
+{id:7,name:"꽃게",category:"수산물",emoji:"🦀",color:"#f4e2d8",kind:"살이 차오르는 가을 꽃게",price:16800,unit:"1kg",change:-3.7,season:"9–11월",tip:"껍질이 단단하고 비린내가 심하지 않은 것을 고르세요. 구매 후에는 차갑게 보관하고 가능한 빨리 조리하세요.",prices:[18000,17600,17300,17100,16800]},
+{id:8,name:"고등어",category:"수산물",emoji:"🐟",color:"#dfe9ee",kind:"구이로 즐기는 등푸른 생선",price:8900,unit:"2마리",change:1.6,season:"9–11월",tip:"눈이 맑고 살에 탄력이 있는 것을 고르세요. 냉장 보관은 짧게 하고 오래 둘 경우 손질해 냉동하세요.",prices:[8500,8600,8700,8750,8900]},
+{id:9,name:"대하",category:"수산물",emoji:"🦐",color:"#f7e2d6",kind:"구워 먹기 좋은 가을 새우",price:14900,unit:"500g",change:4.3,season:"9–11월",tip:"몸이 투명하고 탄력이 있으며 냄새가 강하지 않은 제품을 고르세요. 충분히 익혀 드세요.",prices:[13500,13900,14100,14300,14900]},
+{id:10,name:"감",category:"농산물",emoji:"柿",color:"#f5e4cb",kind:"가을 햇살을 담은 과일",price:5900,unit:"1kg",change:-1.8,season:"10–11월",tip:"용도에 맞는 익힘 정도를 선택하세요. 단감은 단단하고 표면이 매끈한 것이 좋습니다.",prices:[6200,6100,6000,5950,5900]},
+{id:11,name:"미역",category:"수산물",emoji:"🌿",color:"#e4ebd9",kind:"국과 반찬에 활용하는 해조류",price:3600,unit:"100g",change:0.7,season:"연중 · 봄·가을 활용",tip:"건미역은 습기 없는 곳에 보관하고, 생미역은 냉장 보관 후 빠르게 소비하세요.",prices:[3500,3550,3520,3580,3600]},
+{id:12,name:"늙은호박",category:"농산물",emoji:"🎃",color:"#f4e4c8",kind:"달큰한 가을 호박",price:5200,unit:"1개",change:-5.2,season:"9–11월",tip:"껍질이 단단하고 상처가 적은 것을 고르세요. 자른 호박은 랩으로 싸서 냉장 보관하세요.",prices:[5700,5600,5450,5350,5200]}
+];
+let activeFilter="전체";
+const won=n=>n.toLocaleString("ko-KR")+"원";
+const priceOf=p=>Number.isFinite(p.livePrice)?p.livePrice:p.price;
+const changeOf=p=>Number.isFinite(p.liveChange)?p.liveChange:p.change;
+const seriesOf=p=>Array.isArray(p.livePrices)&&p.livePrices.length?p.livePrices:p.prices;
+function setApiStatus(badge,message,ok=false){document.getElementById("apiBadge").textContent=badge;document.getElementById("apiBadge").style.color=ok?"#287c53":"#8a6a2e";document.getElementById("apiBadge").style.background=ok?"#e5f2e8":"#f7efd9";document.getElementById("apiMessage").textContent=message;}
+function lineSvg(values,large=false){let min=Math.min(...values),max=Math.max(...values),range=max-min||1,w=large?500:150,h=large?100:25,p=4;let pts=values.map((v,i)=>`${p+i*(w-2*p)/(values.length-1)},${h-p-(v-min)*(h-2*p)/range}`).join(" ");return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="#477c50" stroke-width="${large?3:2}" stroke-linecap="round" stroke-linejoin="round"/>${large?values.map((v,i)=>{let x=p+i*(w-2*p)/(values.length-1),y=h-p-(v-min)*(h-2*p)/range;return `<circle cx="${x}" cy="${y}" r="3.5" fill="#477c50"/>`}).join(""):""}</svg>`}
+function render(){const q=document.getElementById("search").value.trim().toLowerCase();const list=products.filter(p=>(activeFilter==="전체"||p.category===activeFilter)&&p.name.toLowerCase().includes(q));document.getElementById("count").textContent=`${list.length}개`;document.getElementById("grid").innerHTML=list.length?list.map(p=>`<article class="product" tabindex="0" role="button" aria-label="${p.name} 상세 정보 보기" data-id="${p.id}"><div class="thumb" style="background:${p.color}"><small>${p.category}</small><span>${p.emoji}</span></div><div class="product-body"><h3>${p.name}</h3><div class="sub">${p.kind}</div><div class="price-row"><div><span class="price">${won(priceOf(p))}</span><span class="unit"> / ${p.liveUnit||p.unit}</span></div><span class="change ${changeOf(p)<0?"down":""}">${changeOf(p)>0?"▲":changeOf(p)<0?"▼":"—"} ${Math.abs(changeOf(p)).toFixed(1)}%</span></div><div class="mini-line">${lineSvg(seriesOf(p))}</div></div></article>`).join(""):`<div class="empty">검색 결과가 없어요.<br>다른 상품명을 입력해 보세요.</div>`;document.querySelectorAll(".product").forEach(el=>{el.addEventListener("click",()=>openProduct(+el.dataset.id));el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openProduct(+el.dataset.id)}})});}
+function openProduct(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalContent").innerHTML=`<div class="modal-top"><div class="modal-emoji" style="background:${p.color}">${p.emoji}</div><div><span class="pill">${p.category} · 제철 ${p.season}</span><h2 id="modalTitle">${p.name}</h2><div class="detail-copy">${p.kind}</div><div class="bigprice">${won(priceOf(p))} <span class="unit">/ ${p.liveUnit||p.unit}</span></div><div class="change ${changeOf(p)<0?"down":""}">${p.livePrice!==undefined?"실제 API 가격 변동":"예시 가격 변동"} ${changeOf(p)>0?"▲":changeOf(p)<0?"▼":"—"} ${Math.abs(changeOf(p)).toFixed(1)}%</div></div></div><h3>최근 가격 추이 <span class="unit">(${p.livePrice!==undefined?"KAMIS 응답 가격 기반":"예시 데이터 · 5개 시점"})</span></h3><div class="chart">${lineSvg(seriesOf(p),true)}</div><div class="detail-grid" style="margin-top:10px"><div class="detail-box"><b>비교 기준 가격</b>${won(seriesOf(p)[0])}</div><div class="detail-box"><b>현재 표시 가격</b>${won(priceOf(p))}</div></div><h3>고르는 팁 & 보관</h3><p class="detail-copy">${p.tip}</p><p class="detail-copy">가격은 기능 시연용 예시입니다. 실제 시세 및 판매 가격과 다를 수 있습니다.</p>`;document.getElementById("backdrop").classList.add("show");document.getElementById("close").focus();}
+
+const KAMIS_URL="https://www.kamis.or.kr/service/price/xml.do";
+function numericPrice(value){if(value===undefined||value===null)return null;const s=String(value).replace(/,/g,"").trim();if(!s||s==="-"||s==="0")return null;const n=Number(s);return Number.isFinite(n)&&n>0?n:null;}
+function getRows(payload){
+  if(Array.isArray(payload))return payload;
+  if(payload&&Array.isArray(payload.data))return payload.data;
+  if(payload&&payload.data&&Array.isArray(payload.data.item))return payload.data.item;
+  if(payload&&payload.data&&Array.isArray(payload.data.items))return payload.data.items;
+  if(payload&&payload.data&&Array.isArray(payload.data.row))return payload.data.row;
+  if(payload&&Array.isArray(payload.item))return payload.item;
+  return [];
+}
+async function loadKamisPrices(){
+  const key=document.getElementById("kamisKey").value.trim();
+  const id=document.getElementById("kamisId").value.trim();
+  if(!key||!id){setApiStatus("API 키 설정 필요","KAMIS에서 발급받은 인증키와 요청자 ID를 입력해 주세요.");return;}
+  const button=document.getElementById("loadPrices");button.disabled=true;button.textContent="불러오는 중…";
+  setApiStatus("연결 중","KAMIS API에 요청 중입니다. 제공처의 CORS 정책에 따라 브라우저에서 차단될 수 있습니다.");
+  try{
+    const cats=[{code:"200",name:"채소류"},{code:"400",name:"과일류"},{code:"600",name:"수산물"},{code:"100",name:"식량작물"}];
+    const all=[];
+    for(const cat of cats){
+      const params=new URLSearchParams({action:"dailyPriceByCategoryList",p_product_cls_code:"01",p_country_code:"1101",p_convert_kg_yn:"N",p_item_category_code:cat.code,p_cert_key:key,p_cert_id:id,p_returntype:"json"});
+      const response=await fetch(`${KAMIS_URL}?${params.toString()}`);
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      const data=await response.json();
+      all.push(...getRows(data));
+    }
+    let updated=0;
+    for(const p of products){
+      const row=all.find(r=>String(r.item_name||r.itemName||"").replace(/\s/g,"").includes(p.name.replace(/\s/g,""))||p.name.replace(/\s/g,"").includes(String(r.item_name||r.itemName||"").replace(/\s/g,"")));
+      if(!row)continue;
+      const current=numericPrice(row.dpr1||row.price||row.dpr);
+      const previous=numericPrice(row.dpr5)||numericPrice(row.dpr3)||numericPrice(row.dpr2);
+      if(!current)continue;
+      p.livePrice=current;
+      p.liveUnit=row.unit||p.unit;
+      if(previous){p.liveChange=((current-previous)/previous)*100;p.livePrices=[previous,current];}
+      else{p.liveChange=0;p.livePrices=[current,current];}
+      p.liveItemName=row.item_name||p.name;
+      p.liveDate=row.day1||row.regday||"최근 조사일";
+      updated++;
+    }
+    if(updated===0){setApiStatus("응답 확인 필요","API 응답은 받았지만 상품명이 일치하는 가격 데이터가 없습니다. KAMIS 품목·품종명과 단위가 다를 수 있습니다.");}
+    else{setApiStatus("API 연결 완료",`${updated}개 상품 가격을 KAMIS 응답에서 반영했습니다. 상품별 단위와 조사일을 상세히 확인해 주세요.`,true);}
+    render();
+  }catch(error){
+    console.error(error);
+    setApiStatus("연결 실패","가격을 불러오지 못했습니다. 인증 정보, API 이용 신청 상태, 네트워크 및 CORS 허용 여부를 확인해 주세요. 브라우저 직접 호출이 차단되면 서버리스 프록시가 필요합니다.");
+  }finally{button.disabled=false;button.textContent="실제 가격 불러오기";}
+}
+document.getElementById("loadPrices").addEventListener("click",loadKamisPrices);
+document.getElementById("clearPrices").addEventListener("click",()=>{
+  products.forEach(p=>{delete p.livePrice;delete p.liveUnit;delete p.liveChange;delete p.livePrices;delete p.liveItemName;delete p.liveDate;});
+  document.getElementById("kamisKey").value="";document.getElementById("kamisId").value="";
+  setApiStatus("API 키 설정 필요","연결이 해제되었습니다. 현재는 예시 가격을 표시하고 있습니다.");render();
+});
+
+document.querySelectorAll(".filter").forEach(btn=>btn.addEventListener("click",()=>{activeFilter=btn.dataset.filter;document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b===btn));render()}));
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("close").addEventListener("click",()=>document.getElementById("backdrop").classList.remove("show"));
+document.getElementById("backdrop").addEventListener("click",e=>{if(e.target.id==="backdrop")e.currentTarget.classList.remove("show")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("backdrop").classList.remove("show")});
+render();
+</script>
+</body>
+</html>
