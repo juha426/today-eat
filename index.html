@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f7f5ee">
-<title>오늘뭐먹지 | 10월 제철 장보기</title>
+<title>오늘뭐먹지 | 월별 제철 장보기</title>
 <style>
 :root{--ink:#202b22;--muted:#68736a;--green:#315b3e;--lime:#d9ed9b;--paper:#f7f5ee;--card:#fffef9;--line:#e5e5d9;--orange:#d76b3e;--red:#c34f43;--shadow:0 12px 35px #2633230c}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.5}button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1120px;margin:auto;padding:0 22px}
 header{padding:23px 0 15px;border-bottom:1px solid var(--line)}.nav{display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{font-weight:900;font-size:23px;letter-spacing:-1.3px}.brand span{color:var(--orange)}.navnote{font-size:12px;color:var(--muted)}
 .hero{padding:35px 0 25px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--green);text-transform:uppercase}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.13;letter-spacing:-2px;margin:10px 0 14px}.hero h1 em{font-style:normal;color:var(--green)}.hero p{color:var(--muted);max-width:510px;margin:0}.hero-art{min-height:205px;border-radius:26px;background:#e8edda;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.produce{font-size:clamp(44px,7vw,78px);filter:drop-shadow(0 8px 7px #26332318);letter-spacing:2px}.art-tag{position:absolute;bottom:16px;left:18px;background:#fffef9d9;padding:7px 12px;border-radius:99px;font-size:12px;font-weight:800}
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 14px}.section-title{font-size:22px;letter-spacing:-.7px;margin:0}.count{color:var(--muted);font-size:13px;margin-left:8px;font-weight:500}.search{position:relative;max-width:300px;width:100%}.search input{width:100%;padding:12px 15px 12px 40px;border:1px solid var(--line);border-radius:13px;background:var(--card);outline:none}.search input:focus{border-color:var(--green);box-shadow:0 0 0 3px #315b3e16}.search:before{content:"⌕";position:absolute;left:15px;top:7px;font-size:23px;color:var(--muted)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.filter{border:1px solid var(--line);background:transparent;padding:9px 16px;border-radius:99px;color:var(--muted);font-weight:700;font-size:13px}.filter.active{background:var(--green);border-color:var(--green);color:white}
+.month-nav{display:flex;align-items:center;gap:12px;margin:8px 0 18px;padding:12px 14px;background:#fffef9;border:1px solid var(--line);border-radius:16px;width:fit-content}.month-nav button{border:1px solid var(--line);background:#f7f5ee;border-radius:10px;width:38px;height:38px;font-size:21px;color:var(--green);font-weight:800}.month-nav button:hover{background:#eaf0df}.month-label{min-width:125px;text-align:center}.month-label strong{display:block;font-size:19px;letter-spacing:-.5px}.month-label small{color:var(--muted);font-size:11px}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.filter{border:1px solid var(--line);background:transparent;padding:9px 16px;border-radius:99px;color:var(--muted);font-weight:700;font-size:13px}.filter.active{background:var(--green);border-color:var(--green);color:white}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;padding-bottom:48px}.product{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .18s,box-shadow .18s;cursor:pointer}.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.thumb{height:135px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}.thumb small{position:absolute;top:12px;left:12px;background:#ffffffd9;padding:5px 9px;border-radius:99px;font-size:10px;font-weight:800;color:var(--green)}.product-body{padding:15px}.product h3{margin:0 0 3px;font-size:17px;letter-spacing:-.5px}.sub{font-size:12px;color:var(--muted)}.price-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-top:14px}.price{font-weight:900;font-size:20px;letter-spacing:-.7px}.unit{font-size:11px;color:var(--muted);font-weight:500}.change{font-size:12px;font-weight:800;color:var(--red);white-space:nowrap}.change.down{color:#287c53}.mini-line{height:25px;margin-top:10px}.mini-line svg{width:100%;height:100%;overflow:visible}.empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);background:var(--card);border-radius:18px}
 .note{border-top:1px solid var(--line);padding:20px 0 35px;color:var(--muted);font-size:12px}.note strong{color:var(--ink)}.modal-backdrop{position:fixed;inset:0;background:#18221dcc;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.show{display:flex}.modal{background:var(--card);width:min(580px,100%);max-height:90vh;overflow:auto;border-radius:24px;padding:24px;position:relative}.close{position:absolute;right:17px;top:14px;border:0;background:#eef0e8;border-radius:50%;width:36px;height:36px;font-size:22px}.modal-top{display:flex;gap:18px;align-items:center;padding-right:35px}.modal-emoji{width:110px;height:110px;border-radius:20px;display:grid;place-items:center;font-size:60px;flex-shrink:0}.modal h2{margin:0 0 5px;font-size:27px}.modal .bigprice{font-size:25px;font-weight:900;margin:8px 0}.pill{display:inline-block;border-radius:99px;background:#edf2e4;color:var(--green);font-size:11px;font-weight:800;padding:5px 9px}.modal h3{font-size:15px;margin:22px 0 8px}.chart{height:125px;background:#f2f3eb;border-radius:14px;padding:12px}.chart svg{width:100%;height:100%}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-box{padding:12px;background:#f4f4ec;border-radius:12px;font-size:13px}.detail-box b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}.detail-copy{font-size:13px;color:var(--muted)}
 @media(max-width:850px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{grid-template-columns:1fr .8fr}.thumb{height:120px}}
@@ -22,11 +22,12 @@ header{padding:23px 0 15px;border-bottom:1px solid var(--line)}.nav{display:flex
 <header><div class="wrap nav"><div class="brand">오늘<span>뭐먹지</span> 🍊</div><div class="navnote">제철 장보기, 오늘 더 똑똑하게</div></div></header>
 <main class="wrap">
 <section class="hero">
-  <div><div class="eyebrow">OCTOBER · IN SEASON</div><h1>가을이 맛있어지는<br><em>10월 제철 장보기</em></h1><p>지금 맛있는 제철 농수산물과 가격 흐름을 한눈에 확인해 보세요. 오늘의 장보기에 작은 힌트가 되어줄 거예요.</p></div>
+  <div><div class="eyebrow" id="heroEyebrow">IN SEASON · TODAY</div><h1><span id="heroSeasonLine">지금이 가장 맛있는</span><br><em id="heroMonthTitle">제철 장보기</em></h1><p>원하는 달의 제철 농수산물과 가격 흐름을 한눈에 확인해 보세요. 오늘의 장보기에 작은 힌트가 되어줄 거예요.</p></div>
   <div class="hero-art"><div class="produce">🍎 🍠 🦀</div><div class="art-tag">가을 제철 추천</div></div>
 </section>
 <section>
-  <div class="toolbar"><h2 class="section-title">이번 달 제철 상품 <span class="count" id="count"></span></h2><label class="search"><input id="search" type="search" placeholder="상품명 검색" aria-label="상품명 검색"></label></div>
+  <div class="month-nav" aria-label="조회 월 선택"><button id="prevMonth" type="button" aria-label="이전 달">‹</button><div class="month-label"><strong id="monthLabel"></strong><small>월별 제철 상품 보기</small></div><button id="nextMonth" type="button" aria-label="다음 달">›</button></div>
+  <div class="toolbar"><h2 class="section-title"><span id="listMonthTitle">이번 달</span> 제철 상품 <span class="count" id="count"></span></h2><label class="search"><input id="search" type="search" placeholder="상품명 검색" aria-label="상품명 검색"></label></div>
   <div class="api-panel" style="background:#fffef9;border:1px solid #e5e5d9;border-radius:18px;padding:16px;margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
       <div><strong>실제 가격 데이터 연결</strong><div style="font-size:12px;color:#68736a;margin-top:3px">KAMIS 농수축산물 가격정보 Open API · 서울 소매가 기준</div></div>
@@ -67,13 +68,34 @@ const products=[
 {id:12,name:"늙은호박",category:"농산물",emoji:"🎃",color:"#f4e4c8",kind:"달큰한 가을 호박",price:5200,unit:"1개",change:-5.2,season:"9–11월",tip:"껍질이 단단하고 상처가 적은 것을 고르세요. 자른 호박은 랩으로 싸서 냉장 보관하세요.",prices:[5700,5600,5450,5350,5200]}
 ];
 let activeFilter="전체";
+const today=new Date();
+let selectedYear=today.getFullYear();
+let selectedMonth=today.getMonth()+1;
 const won=n=>n.toLocaleString("ko-KR")+"원";
 const priceOf=p=>Number.isFinite(p.livePrice)?p.livePrice:p.price;
 const changeOf=p=>Number.isFinite(p.liveChange)?p.liveChange:p.change;
 const seriesOf=p=>Array.isArray(p.livePrices)&&p.livePrices.length?p.livePrices:p.prices;
 function setApiStatus(badge,message,ok=false){document.getElementById("apiBadge").textContent=badge;document.getElementById("apiBadge").style.color=ok?"#287c53":"#8a6a2e";document.getElementById("apiBadge").style.background=ok?"#e5f2e8":"#f7efd9";document.getElementById("apiMessage").textContent=message;}
 function lineSvg(values,large=false){let min=Math.min(...values),max=Math.max(...values),range=max-min||1,w=large?500:150,h=large?100:25,p=4;let pts=values.map((v,i)=>`${p+i*(w-2*p)/(values.length-1)},${h-p-(v-min)*(h-2*p)/range}`).join(" ");return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="#477c50" stroke-width="${large?3:2}" stroke-linecap="round" stroke-linejoin="round"/>${large?values.map((v,i)=>{let x=p+i*(w-2*p)/(values.length-1),y=h-p-(v-min)*(h-2*p)/range;return `<circle cx="${x}" cy="${y}" r="3.5" fill="#477c50"/>`}).join(""):""}</svg>`}
-function render(){const q=document.getElementById("search").value.trim().toLowerCase();const list=products.filter(p=>(activeFilter==="전체"||p.category===activeFilter)&&p.name.toLowerCase().includes(q));document.getElementById("count").textContent=`${list.length}개`;document.getElementById("grid").innerHTML=list.length?list.map(p=>`<article class="product" tabindex="0" role="button" aria-label="${p.name} 상세 정보 보기" data-id="${p.id}"><div class="thumb" style="background:${p.color}"><small>${p.category}</small><span>${p.emoji}</span></div><div class="product-body"><h3>${p.name}</h3><div class="sub">${p.kind}</div><div class="price-row"><div><span class="price">${won(priceOf(p))}</span><span class="unit"> / ${p.liveUnit||p.unit}</span></div><span class="change ${changeOf(p)<0?"down":""}">${changeOf(p)>0?"▲":changeOf(p)<0?"▼":"—"} ${Math.abs(changeOf(p)).toFixed(1)}%</span></div><div class="mini-line">${lineSvg(seriesOf(p))}</div></div></article>`).join(""):`<div class="empty">검색 결과가 없어요.<br>다른 상품명을 입력해 보세요.</div>`;document.querySelectorAll(".product").forEach(el=>{el.addEventListener("click",()=>openProduct(+el.dataset.id));el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openProduct(+el.dataset.id)}})});}
+function inSeason(p, month){
+  const season=String(p.season||"");
+  if(season.includes("연중")) return true;
+  const matches=[...season.matchAll(/(\d{1,2})\s*[–-]\s*(\d{1,2})\s*월/g)];
+  if(matches.length){return matches.some(m=>{const start=Number(m[1]),end=Number(m[2]);return start<=end?(month>=start&&month<=end):(month>=start||month<=end);});}
+  const singles=[...season.matchAll(/(\d{1,2})\s*월/g)].map(m=>Number(m[1]));
+  return singles.length?singles.includes(month):true;
+}
+function updateMonthUI(){
+  const label=`${selectedYear}년 ${selectedMonth}월`;
+  document.getElementById("monthLabel").textContent=label;
+  document.getElementById("listMonthTitle").textContent=`${selectedMonth}월`;
+  document.getElementById("heroEyebrow").textContent=`${String(selectedMonth).padStart(2,"0")} · IN SEASON`;
+  document.getElementById("heroSeasonLine").textContent=selectedMonth>=3&&selectedMonth<=5?"봄이 맛있어지는":selectedMonth>=6&&selectedMonth<=8?"여름이 맛있어지는":selectedMonth>=9&&selectedMonth<=11?"가을이 맛있어지는":"겨울이 맛있어지는";
+  document.getElementById("heroMonthTitle").textContent=`${selectedMonth}월 제철 장보기`;
+  document.title=`오늘뭐먹지 | ${selectedMonth}월 제철 장보기`;
+}
+function moveMonth(delta){selectedMonth+=delta;if(selectedMonth<1){selectedMonth=12;selectedYear--;}else if(selectedMonth>12){selectedMonth=1;selectedYear++;}updateMonthUI();render();}
+function render(){const q=document.getElementById("search").value.trim().toLowerCase();const list=products.filter(p=>inSeason(p,selectedMonth)&&(activeFilter==="전체"||p.category===activeFilter)&&p.name.toLowerCase().includes(q));document.getElementById("count").textContent=`${list.length}개`;document.getElementById("grid").innerHTML=list.length?list.map(p=>`<article class="product" tabindex="0" role="button" aria-label="${p.name} 상세 정보 보기" data-id="${p.id}"><div class="thumb" style="background:${p.color}"><small>${p.category}</small><span>${p.emoji}</span></div><div class="product-body"><h3>${p.name}</h3><div class="sub">${p.kind}</div><div class="price-row"><div><span class="price">${won(priceOf(p))}</span><span class="unit"> / ${p.liveUnit||p.unit}</span></div><span class="change ${changeOf(p)<0?"down":""}">${changeOf(p)>0?"▲":changeOf(p)<0?"▼":"—"} ${Math.abs(changeOf(p)).toFixed(1)}%</span></div><div class="mini-line">${lineSvg(seriesOf(p))}</div></div></article>`).join(""):`<div class="empty">검색 결과가 없어요.<br>다른 상품명을 입력해 보세요.</div>`;document.querySelectorAll(".product").forEach(el=>{el.addEventListener("click",()=>openProduct(+el.dataset.id));el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openProduct(+el.dataset.id)}})});}
 function openProduct(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById("modalContent").innerHTML=`<div class="modal-top"><div class="modal-emoji" style="background:${p.color}">${p.emoji}</div><div><span class="pill">${p.category} · 제철 ${p.season}</span><h2 id="modalTitle">${p.name}</h2><div class="detail-copy">${p.kind}</div><div class="bigprice">${won(priceOf(p))} <span class="unit">/ ${p.liveUnit||p.unit}</span></div><div class="change ${changeOf(p)<0?"down":""}">${p.livePrice!==undefined?"실제 API 가격 변동":"예시 가격 변동"} ${changeOf(p)>0?"▲":changeOf(p)<0?"▼":"—"} ${Math.abs(changeOf(p)).toFixed(1)}%</div></div></div><h3>최근 가격 추이 <span class="unit">(${p.livePrice!==undefined?"KAMIS 응답 가격 기반":"예시 데이터 · 5개 시점"})</span></h3><div class="chart">${lineSvg(seriesOf(p),true)}</div><div class="detail-grid" style="margin-top:10px"><div class="detail-box"><b>비교 기준 가격</b>${won(seriesOf(p)[0])}</div><div class="detail-box"><b>현재 표시 가격</b>${won(priceOf(p))}</div></div><h3>고르는 팁 & 보관</h3><p class="detail-copy">${p.tip}</p><p class="detail-copy">가격은 기능 시연용 예시입니다. 실제 시세 및 판매 가격과 다를 수 있습니다.</p>`;document.getElementById("backdrop").classList.add("show");document.getElementById("close").focus();}
 
 const KAMIS_URL="https://www.kamis.or.kr/service/price/xml.do";
@@ -126,6 +148,8 @@ async function loadKamisPrices(){
     setApiStatus("연결 실패","가격을 불러오지 못했습니다. 인증 정보, API 이용 신청 상태, 네트워크 및 CORS 허용 여부를 확인해 주세요. 브라우저 직접 호출이 차단되면 서버리스 프록시가 필요합니다.");
   }finally{button.disabled=false;button.textContent="실제 가격 불러오기";}
 }
+document.getElementById("prevMonth").addEventListener("click",()=>moveMonth(-1));
+document.getElementById("nextMonth").addEventListener("click",()=>moveMonth(1));
 document.getElementById("loadPrices").addEventListener("click",loadKamisPrices);
 document.getElementById("clearPrices").addEventListener("click",()=>{
   products.forEach(p=>{delete p.livePrice;delete p.liveUnit;delete p.liveChange;delete p.livePrices;delete p.liveItemName;delete p.liveDate;});
@@ -138,6 +162,7 @@ document.getElementById("search").addEventListener("input",render);
 document.getElementById("close").addEventListener("click",()=>document.getElementById("backdrop").classList.remove("show"));
 document.getElementById("backdrop").addEventListener("click",e=>{if(e.target.id==="backdrop")e.currentTarget.classList.remove("show")});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("backdrop").classList.remove("show")});
+updateMonthUI();
 render();
 </script>
 </body>
