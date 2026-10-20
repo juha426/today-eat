@@ -695,6 +695,54 @@
           </div>
         </div>
 
+<!-- KAMIS 직접 호출 테스트 영역: 시작 -->
+<section class="info-card" style="margin:20px 0;">
+  <h3>KAMIS API 직접 호출 테스트</h3>
+  <p>테스트용 인증정보를 입력해 KAMIS 응답을 확인합니다.</p>
+
+  <label for="testCertKey">인증키</label>
+  <input id="testCertKey" type="password"
+    autocomplete="off" placeholder="KAMIS 인증키"
+    style="display:block;width:100%;padding:10px;margin:6px 0 12px;">
+
+  <label for="testCertId">인증 ID</label>
+  <input id="testCertId" type="text"
+    autocomplete="off" placeholder="KAMIS 인증 ID"
+    style="display:block;width:100%;padding:10px;margin:6px 0 12px;">
+
+  <label for="testDate">조회 날짜</label>
+  <input id="testDate" type="date" value="2015-10-01"
+    style="display:block;width:100%;padding:10px;margin:6px 0 12px;">
+
+  <label for="testCategory">상품 분류</label>
+  <select id="testCategory"
+    style="display:block;width:100%;padding:10px;margin:6px 0 12px;">
+    <option value="200">채소류</option>
+    <option value="100">식량작물</option>
+    <option value="300">특용작물</option>
+    <option value="400">과일류</option>
+    <option value="500">축산물</option>
+    <option value="600">수산물</option>
+  </select>
+
+  <label for="testPriceType">가격 구분</label>
+  <select id="testPriceType"
+    style="display:block;width:100%;padding:10px;margin:6px 0 12px;">
+    <option value="02">도매가격</option>
+    <option value="01">소매가격</option>
+  </select>
+
+  <button id="testKamisButton" type="button"
+    class="status-action">KAMIS 직접 호출 테스트</button>
+
+  <p id="testKamisStatus" role="status" aria-live="polite">
+    테스트 전입니다.
+  </p>
+  <pre id="testKamisResult"
+    style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:400px;overflow:auto;"></pre>
+</section>
+<!-- KAMIS 직접 호출 테스트 영역: 끝 -->
+        
         <div class="product-grid" id="productGrid">
           <div class="empty-state">
             <strong>제철 식재료를 불러오는 중입니다.</strong>
@@ -1333,6 +1381,99 @@
       renderProducts();
     });
 
+
+document.querySelector("#testKamisButton").addEventListener("click", async () => {
+  const certKey = document.querySelector("#testCertKey").value.trim();
+  const certId = document.querySelector("#testCertId").value.trim();
+  const date = document.querySelector("#testDate").value;
+  const category = document.querySelector("#testCategory").value;
+  const priceType = document.querySelector("#testPriceType").value;
+
+  const status = document.querySelector("#testKamisStatus");
+  const output = document.querySelector("#testKamisResult");
+  const button = document.querySelector("#testKamisButton");
+
+  if (!certKey || !certId || !date) {
+    status.textContent = "인증키, 인증 ID, 날짜를 입력해 주세요.";
+    return;
+  }
+
+  const params = new URLSearchParams({
+    action: "dailyPriceByCategoryList",
+    p_product_cls_code: priceType,
+    p_country_code: "1101",
+    p_regday: date,
+    p_convert_kg_yn: "N",
+    p_item_category_code: category,
+    p_cert_key: certKey,
+    p_cert_id: certId,
+    p_returntype: "xml"
+  });
+
+  button.disabled = true;
+  status.textContent = "KAMIS 서버에 요청 중입니다...";
+  output.textContent = "";
+
+  try {
+    const response = await fetch(
+      "https://www.kamis.or.kr/service/price/xml.do?" + params.toString(),
+      { headers: { Accept: "application/xml, text/xml, */*" } }
+    );
+
+    const body = await response.text();
+
+    // 인증정보가 원본 응답에 포함될 경우 화면에 노출하지 않도록 처리
+    output.textContent = body
+      .replaceAll(certKey, "[인증키 숨김]")
+      .replaceAll(certId, "[인증ID 숨김]")
+      .slice(0, 15000);
+
+    if (!response.ok) {
+      status.textContent = `실패: HTTP ${response.status}`;
+      return;
+    }
+
+    if (/web firewall security policies|access denied/i.test(body)) {
+      status.textContent = "KAMIS 보안 정책에 의해 차단된 응답으로 보입니다.";
+      return;
+    }
+
+    const xml = new DOMParser().parseFromString(body, "application/xml");
+
+    if (xml.querySelector("parsererror")) {
+      status.textContent =
+        "XML 응답을 해석하지 못했습니다. 아래 원본 응답을 확인하세요.";
+      return;
+    }
+
+    const items = Array.from(xml.getElementsByTagName("item"));
+
+    if (!items.length) {
+      status.textContent =
+        "HTTP 요청은 성공했지만 상품 데이터가 없습니다. 원본 응답을 확인하세요.";
+      return;
+    }
+
+    const rows = items.map(item => ({
+      상품명: item.getElementsByTagName("item_name")[0]?.textContent?.trim() || "",
+      품종: item.getElementsByTagName("kind_name")[0]?.textContent?.trim() || "",
+      단위: item.getElementsByTagName("unit")[0]?.textContent?.trim() || "",
+      당일가격: item.getElementsByTagName("dpr1")[0]?.textContent?.trim() || "",
+      전일가격: item.getElementsByTagName("dpr2")[0]?.textContent?.trim() || ""
+    }));
+
+    output.textContent = JSON.stringify(rows, null, 2);
+    status.textContent = `성공: 상품 ${rows.length}건을 받았습니다.`;
+  } catch (error) {
+    status.textContent =
+      "브라우저 요청 실패: " + error.message +
+      "\nCORS 또는 네트워크 문제일 수 있습니다. IP 차단 여부는 이 오류만으로 확정할 수 없습니다.";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+    
     loadButton.addEventListener("click", loadPrices);
 
     // 페이지를 열면 현재 월을 기본으로 표시합니다.
