@@ -106,6 +106,12 @@ console.log(
   Array.isArray(json.data) ? json.data.length : "배열 아님"
 );
 
+// KAMIS 응답의 실제 데이터 구조 확인
+console.log(
+  `${category.name}: data 내부 구조`,
+  JSON.stringify(json.data).slice(0, 2000)
+);
+  
 const condition = json.condition ?? {};
 const errorCode = String(condition.error_code ?? "");
 
