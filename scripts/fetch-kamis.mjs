@@ -37,16 +37,33 @@ function changeRate(current, previous) {
 }
 
 async function fetchCategory(category) {
-  const params = new URLSearchParams({
-    action: "dailyPriceByCategoryList",
-    p_cert_key: CERT_KEY,
-    p_cert_id: CERT_ID,
-    p_returntype: "json",
-    p_product_cls_code: "01",
-    p_item_category_code: category.code,
-    p_country_code: "1101",
-    p_convert_kg_yn: "Y"
-  });
+  // 한국 시간 기준 날짜
+function getKoreaDate() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(new Date());
+
+  const values = Object.fromEntries(
+    parts.map(part => [part.type, part.value])
+  );
+
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+const params = new URLSearchParams({
+  action: "dailyPriceByCategoryList",
+  p_cert_key: CERT_KEY,
+  p_cert_id: CERT_ID,
+  p_returntype: "json",
+  p_product_cls_code: "01",
+  p_item_category_code: category.code,
+  p_country_code: "1101",
+  p_regday: getKoreaDate(),
+  p_convert_kg_yn: "Y"
+});
 
   const response = await fetch(`${API_URL}?${params}`);
 
