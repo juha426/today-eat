@@ -22,10 +22,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: KAMIS 가격 수집
+            - name: 가격 데이터 수집
         env:
-          KAMIS_CERT_KEY: ${{ secrets.KAMIS_CERT_KEY }}
-          KAMIS_CERT_ID: ${{ secrets.KAMIS_CERT_ID }}
+          DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
         run: python scripts/fetch_kamis.py
 
       - name: 가격 JSON 저장
