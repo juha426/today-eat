@@ -132,6 +132,37 @@ console.log(
 const condition = json.condition ?? {};
 const errorCode = String(condition.error_code ?? "");
 
+const responseData = json.data;
+
+if (
+  Array.isArray(responseData) &&
+  responseData.length === 1 &&
+  ["000", "001", "200", "900"].includes(
+    String(responseData[0])
+  )
+) {
+  const code = String(responseData[0]);
+
+  if (code === "200") {
+    throw new Error(
+      `${category.name}: KAMIS 요청 변수가 올바르지 않습니다.`
+    );
+  }
+
+  if (code === "900") {
+    throw new Error(
+      `${category.name}: KAMIS 인증에 실패했습니다.`
+    );
+  }
+
+  if (code === "001") {
+    console.warn(
+      `${category.name}: 조회 결과가 없습니다.`
+    );
+    return [];
+  }
+}
+
   if (errorCode && errorCode !== "000") {
     if (errorCode === "001") {
       console.warn(`${category.name}: 조회 데이터 없음`);
