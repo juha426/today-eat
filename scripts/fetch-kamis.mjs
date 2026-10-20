@@ -56,9 +56,58 @@ async function fetchCategory(category) {
     );
   }
 
-  const json = await response.json();
-  const condition = json.condition ?? {};
-  const errorCode = String(condition.error_code ?? "");
+  const responseText = await response.text();
+
+console.log(
+  `${category.name}: HTTP ${response.status}`
+);
+
+console.log(
+  `${category.name}: Content-Type =`,
+  response.headers.get("content-type")
+);
+
+let json;
+
+try {
+  json = JSON.parse(responseText);
+} catch {
+  console.error(
+    `${category.name}: JSON 파싱 실패`
+  );
+
+  console.error(
+    "응답 앞부분:",
+    responseText.slice(0, 500)
+  );
+
+  throw new Error(
+    `${category.name}: KAMIS 응답이 JSON 형식이 아닙니다.`
+  );
+}
+
+console.log(
+  `${category.name}: 응답 최상위 키`,
+  Object.keys(json)
+);
+
+console.log(
+  `${category.name}: condition`,
+  JSON.stringify(json.condition ?? {})
+);
+
+console.log(
+  `${category.name}: price 개수`,
+  Array.isArray(json.price) ? json.price.length : "배열 아님"
+);
+
+console.log(
+  `${category.name}: data 개수`,
+  Array.isArray(json.data) ? json.data.length : "배열 아님"
+);
+
+const condition = json.condition ?? {};
+const errorCode = String(condition.error_code ?? "");
 
   if (errorCode && errorCode !== "000") {
     if (errorCode === "001") {
