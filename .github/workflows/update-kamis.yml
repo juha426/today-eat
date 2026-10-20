@@ -1,1 +1,39 @@
+name: Update KAMIS prices
 
+on:
+  workflow_dispatch:
+  schedule:
+    # 매일 한국시간 오전 10시 17분 (UTC 01:17)
+    - cron: "17 1 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: KAMIS 가격 수집
+        env:
+          KAMIS_CERT_KEY: ${{ secrets.KAMIS_CERT_KEY }}
+          KAMIS_CERT_ID: ${{ secrets.KAMIS_CERT_ID }}
+        run: python scripts/fetch_kamis.py
+
+      - name: 가격 JSON 저장
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/kamis-prices.json
+          git diff --cached --quiet || {
+            git commit -m "Update daily KAMIS prices"
+            git push
+          }
