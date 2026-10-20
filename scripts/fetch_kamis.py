@@ -51,7 +51,7 @@ def fetch_category(code, category_name):
         headers={"User-Agent": "TodayEatPriceBot/1.0"}
     )
 
-    with urllib.request.urlopen(request, timeout=30) as response:
+    with urllib.request.urlopen(request, timeout=60) as response:
         body = response.read()
         status = response.status
 
