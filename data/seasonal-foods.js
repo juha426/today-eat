@@ -3,7 +3,7 @@
 // months: 상품을 노출할 월 (1~12)
 // category: 농산물 또는 수산물
 
-const seasonalFoods = [
+const seasonalFoodItems = [
   // ───── 1~4월 과일 ─────
   { name: "딸기", category: "농산물", months: [1, 2, 3, 4], description: "겨울부터 봄까지 즐기는 과일" },
   { name: "감귤", category: "농산물", months: [11, 12, 1, 2], description: "겨울철 대표 감귤류" },
@@ -94,6 +94,20 @@ const seasonalFoods = [
   { name: "임연수어", category: "수산물", months: [2, 3, 4], description: "구이로 즐기기 좋은 생선" },
   { name: "숭어", category: "수산물", months: [3, 4], description: "봄철에 찾는 생선" }
 ];
+
+// 기존 index.html에서 사용하는 월별 데이터 구조로 변환
+const seasonalFoods = {};
+
+for (let month = 1; month <= 12; month++) {
+  seasonalFoods[month] = seasonalFoodItems
+    .filter(food => food.months.includes(month))
+    .map(food => [
+      food.name,
+      food.category === "수산물" ? "🐟" : "🥬",
+      food.category,
+      food.description
+    ]);
+}
 
 // 현재 월 상품 조회 예시
 // const currentMonth = new Date().getMonth() + 1;
