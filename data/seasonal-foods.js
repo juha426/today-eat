@@ -100,4 +100,3 @@ const seasonalFoods = [
 // const currentMonthFoods = seasonalFoods.filter(food =>
 //   food.months.includes(currentMonth)
 // );
-```
