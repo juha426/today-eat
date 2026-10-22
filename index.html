@@ -897,9 +897,20 @@
         row.week_ago_price ??
         null;
     }
+    // 저장소의 data/seasonal-foods.js에서는 seasonalFoodItems를 사용합니다.
+    // 이전 파일에서 사용하던 seasonalFoods 이름도 호환되도록 둘 다 지원합니다.
+    function getSeasonalFoodList() {
+      if (typeof seasonalFoodItems !== "undefined" && Array.isArray(seasonalFoodItems)) {
+        return seasonalFoodItems;
+      }
+      if (typeof seasonalFoods !== "undefined" && Array.isArray(seasonalFoods)) {
+        return seasonalFoods;
+      }
+      return [];
+    }
     function getCategoryForFood(name) {
-      if (!Array.isArray(seasonalFoods)) return "";
-      const food = seasonalFoods.find(item =>
+      const foods = getSeasonalFoodList();
+      const food = foods.find(item =>
         normalizeText(item.name) === normalizeText(name)
       );
       return food?.category ?? "";
@@ -1103,8 +1114,7 @@
       };
     }
     function getMonthFoods() {
-      if (!Array.isArray(seasonalFoods)) return [];
-      return seasonalFoods
+      return getSeasonalFoodList()
         .filter(food => Array.isArray(food.months) && food.months.includes(state.month))
         .map(food => [
           food.name,
