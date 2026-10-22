@@ -53,7 +53,7 @@ function getKoreaDate() {
 // KAMIS 카테고리별 가격 조회
 async function fetchCategory(category) {
   const params = new URLSearchParams({
-    action: "periodProductList",
+    action: "dailyPriceByCategoryList",
     p_cert_key: CERT_KEY,
     p_cert_id: CERT_ID,
     p_returntype: "json",
