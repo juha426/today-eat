@@ -522,6 +522,29 @@
       }
     }
     
+
+    .recommendation-heading {
+      margin: 0 0 16px;
+    }
+    .recommendation-heading h2 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -1px;
+    }
+    .recommendation-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .trend-panel-low .trend-rate.up { color: #b84235; }
+    .trend-panel-high .trend-rate.down { color: #337c53; }
+    .trend-card { overflow-wrap: anywhere; }
+    .trend-name { white-space: normal; overflow-wrap: anywhere; }
+    .trend-rate { line-height: 1.35; }
+    @media (max-width: 650px) {
+      .recommendation-heading h2 { font-size: 22px; }
+      .trend-heading { align-items: flex-start; }
+    }
     .info-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -659,19 +682,12 @@
     </section>
     <section class="section">
       <div class="container">
-        <div class="section-heading">
-          <div>
-            <h2 id="sectionTitle">이달의 제철 식재료</h2>
-            <p>제철 식재료를 살펴보고 장보기 계획을 세워보세요.</p>
-          </div>
-          <div class="month-navigation" aria-label="조회 월 선택">
-            <button id="prevMonth" type="button" aria-label="이전 달">‹</button>
-            <div class="month-label" id="monthLabel"></div>
-            <button id="nextMonth" type="button" aria-label="다음 달">›</button>
-          </div>
-        </div>
                 <!-- 작년 대비 가격 하락 상품 -->
-        <section class="price-trend-section" aria-label="작년 대비 가격 하락 상품">
+        <section class="price-trend-section" aria-label="작년 대비 가격 변동 상품">
+          <div class="recommendation-heading">
+            <h2>이 상품은 어때요?</h2>
+            <p>월 이동과 관계없이 작년 대비 가격 변동이 큰 상품을 보여드려요.</p>
+          </div>
           <div class="price-trend-grid">
 
             <!-- 가격 하락률이 큰 상품 -->
@@ -694,19 +710,19 @@
               </div>
             </article>
 
-            <!-- 가격 하락률이 작은 상품 -->
+            <!-- 작년 대비 가격 상승률이 큰 상품 -->
             <article class="trend-panel trend-panel-low">
               <div class="trend-heading">
                 <div>
-                  <span class="trend-eyebrow">PRICE WATCH</span>
-                  <h3>🌿 작년보다 조금 저렴해요</h3>
-                  <p>가격이 소폭 하락한 상품</p>
+                  <span class="trend-eyebrow">PRICE INCREASE</span>
+                  <h3>📈 작년보다 비싸요</h3>
+                  <p>작년 대비 가격 상승률이 큰 상품</p>
                 </div>
                 <div class="trend-controls">
                   <button type="button" class="trend-prev" data-target="trendLowTrack"
-                    aria-label="가격 하락률이 작은 상품 이전">‹</button>
+                    aria-label="가격 상승률이 큰 상품 이전">‹</button>
                   <button type="button" class="trend-next" data-target="trendLowTrack"
-                    aria-label="가격 하락률이 작은 상품 다음">›</button>
+                    aria-label="가격 상승률이 큰 상품 다음">›</button>
                 </div>
               </div>
               <div class="trend-track" id="trendLowTrack" aria-live="polite">
@@ -716,9 +732,20 @@
 
           </div>
           <p class="trend-notice">
-            KAMIS 가격 기준 · 작년 동기 대비 하락한 상품만 표시합니다.
+            KAMIS 가격 기준 · 작년 대비 변동률이 유효한 상품만 표시합니다.
           </p>
         </section>
+        <div class="section-heading">
+          <div>
+            <h2 id="sectionTitle">이달의 제철 식재료</h2>
+            <p>제철 식재료를 살펴보고 장보기 계획을 세워보세요.</p>
+          </div>
+          <div class="month-navigation" aria-label="조회 월 선택">
+            <button id="prevMonth" type="button" aria-label="이전 달">‹</button>
+            <div class="month-label" id="monthLabel"></div>
+            <button id="nextMonth" type="button" aria-label="다음 달">›</button>
+          </div>
+        </div>
         <div class="filters" aria-label="식재료 필터">
           <button class="filter-button active" data-category="all" type="button">전체</button>
           <button class="filter-button" data-category="농산물" type="button">🌱 농산물</button>
@@ -871,10 +898,11 @@
         null;
     }
     function getCategoryForFood(name) {
-      const food = Object.values(seasonalFoods)
-        .flat()
-        .find(item => normalizeText(item[0]) === normalizeText(name));
-      return food?.[2] ?? "";
+      if (!Array.isArray(seasonalFoods)) return "";
+      const food = seasonalFoods.find(item =>
+        normalizeText(item.name) === normalizeText(name)
+      );
+      return food?.category ?? "";
     }
     /*
      * 가격 JSON의 카테고리는 '채소류', '과일류', '수산물' 등으로
@@ -902,81 +930,54 @@
         parsePrice(getPriceValue(row)) !== null
       ) || null;
     }
-        // 작년 대비 가격 변동률이 있는 KAMIS 상품 찾기
-    function findYearComparePrice(foodName) {
-      const target = normalizeText(foodName);
-
-      const matches = state.prices.filter(row => {
-        const rowName = normalizeText(getItemName(row));
-
-        return rowName && (
-          rowName === target ||
-          rowName.includes(target) ||
-          target.includes(rowName)
-        );
-      });
-
-      // 작년 대비 변동률이 실제로 존재하는 상품만 사용
-      const validMatches = matches.filter(row => {
-        if (
-          row.pctYear === null ||
-          row.pctYear === undefined ||
-          String(row.pctYear).trim() === ""
-        ) {
-          return false;
-        }
-
-        const rate = Number(row.pctYear);
-
-        return Number.isFinite(rate) &&
-          parsePrice(getPriceValue(row)) !== null;
-      });
-
-      // 상품명이 정확히 일치하는 데이터 우선
-      return validMatches.find(row =>
-        normalizeText(getItemName(row)) === target
-      ) || validMatches[0] || null;
+    // 상품명에 맞는 이모지. 별도 이모지가 없으면 기본 식재료 아이콘을 사용합니다.
+    function getFoodEmoji(name, category) {
+      const emojis = {
+        "딸기":"🍓", "감귤":"🍊", "한라봉":"🍊", "천혜향":"🍊", "참외":"🍈",
+        "수박":"🍉", "복숭아":"🍑", "자두":"🍑", "포도":"🍇", "사과":"🍎",
+        "배":"🍐", "감":"🟠", "유자":"🍋", "봄동":"🥬", "시금치":"🥬", "무":"🥕",
+        "배추":"🥬", "연근":"🪷", "냉이":"🌿", "달래":"🌿", "쑥":"🌿", "미나리":"🥬",
+        "두릅":"🌿", "참나물":"🥬", "취나물":"🥬", "오이":"🥒", "토마토":"🍅",
+        "매실":"🫒", "마늘종":"🧄", "양파":"🧅", "감자":"🥔", "옥수수":"🌽",
+        "고구마":"🍠", "밤":"🌰", "땅콩":"🥜", "단호박":"🎃", "브로콜리":"🥦",
+        "굴":"🦪", "홍합":"🦪", "꼬막":"🦪", "명태":"🐟", "대구":"🐟", "아귀":"🐟",
+        "삼치":"🐟", "바지락":"🦪", "도미":"🐟", "주꾸미":"🐙", "도다리":"🐟",
+        "멍게":"🪸", "소라":"🐚", "키조개":"🦪", "꽃게":"🦀", "고등어":"🐟",
+        "전어":"🐟", "대하":"🦐", "쌀":"🌾", "찹쌀":"🌾", "현미":"🌾", "보리쌀":"🌾"
+      };
+      if (emojis[name]) return emojis[name];
+      return category === "수산물" || /수산|어류|해산/.test(String(category)) ? "🐟" : "🥗";
     }
 
-    // 현재 월 제철 상품 중 작년 대비 가격이 하락한 상품 추출
+    // 작년 대비 가격 비교가 가능한 상품을 월별 제철 목록과 무관하게 추립니다.
     function getYearPriceDropItems() {
       if (!state.pricesLoaded) return [];
+      const byName = new Map();
 
-      const seen = new Set();
+      state.prices.forEach(row => {
+        const name = String(getItemName(row) || "").trim();
+        const rateRaw = row.pctYear;
+        const rate = Number(rateRaw);
+        const price = parsePrice(getPriceValue(row));
+        if (!name || price === null || rateRaw === null || rateRaw === undefined || String(rateRaw).trim() === "" || !Number.isFinite(rate)) return;
 
-      return getMonthFoods()
-        .map(food => {
-          const [name, emoji, category] = food;
-          const row = findYearComparePrice(name);
+        const key = normalizeText(name);
+        const item = {
+          name,
+          emoji: getFoodEmoji(name, row.category || getCategoryForFood(name)),
+          category: row.category || getCategoryForFood(name),
+          row,
+          rate
+        };
+        const previous = byName.get(key);
+        // 중복 규격이 있으면 정확한 품목명과 유효한 연간 변동률이 있는 첫 항목을 사용합니다.
+        if (!previous || normalizeText(getItemName(row)) === key) byName.set(key, item);
+      });
 
-          if (!row) return null;
-
-          const rate = Number(row.pctYear);
-
-          // 가격 상승 또는 변동률이 0인 상품은 제외
-          if (!Number.isFinite(rate) || rate >= 0) {
-            return null;
-          }
-
-          // 상품 중복 노출 방지
-          const normalizedName = normalizeText(name);
-
-          if (seen.has(normalizedName)) return null;
-          seen.add(normalizedName);
-
-          return {
-            name,
-            emoji,
-            category,
-            row,
-            rate
-          };
-        })
-        .filter(Boolean);
+      return Array.from(byName.values());
     }
 
-    // 가격 하락 배너 카드 생성
-    function createTrendCard(item) {
+    function createTrendCard(item, direction) {
       const card = document.createElement("article");
       card.className = "trend-card";
 
@@ -988,298 +989,81 @@
       const name = document.createElement("h4");
       name.className = "trend-name";
       name.textContent = item.name;
+      name.title = item.name;
 
       const rate = document.createElement("div");
       rate.className = "trend-rate";
-
-      const rateNumber = Math.abs(item.rate).toFixed(1);
-
-      rate.textContent = `▼ ${rateNumber}%`;
-
-      const rateCaption = document.createElement("span");
-      rateCaption.textContent = " 작년 대비";
-      rate.appendChild(rateCaption);
+      rate.classList.add(direction === "down" ? "down" : "up");
+      rate.textContent = `${direction === "down" ? "▼" : "▲"} ${Math.abs(item.rate).toFixed(1)}%`;
+      const caption = document.createElement("span");
+      caption.textContent = " 작년 대비";
+      rate.appendChild(caption);
 
       const price = document.createElement("div");
       price.className = "trend-price";
-
       const currentPrice = parsePrice(getPriceValue(item.row));
       const unit = item.row.unit ? ` / ${item.row.unit}` : "";
-
       price.textContent = currentPrice !== null
         ? `현재 ${formatPrice(currentPrice)}원${unit}`
         : "현재 가격 정보 없음";
 
       card.append(emoji, name, rate, price);
-
       return card;
     }
 
-    // 하락률이 큰 상품과 작은 상품을 각각 슬라이드로 표시
     function renderYearPriceTrends() {
       const highTrack = $("#trendHighTrack");
       const lowTrack = $("#trendLowTrack");
-
       if (!highTrack || !lowTrack) return;
-
       highTrack.replaceChildren();
       lowTrack.replaceChildren();
 
-      if (!state.pricesLoaded) {
+      if (!state.pricesLoaded || state.error) {
         const message = state.error
           ? "가격 데이터를 확인할 수 없습니다."
           : "가격 정보를 불러오는 중입니다.";
-
         [highTrack, lowTrack].forEach(track => {
           const empty = document.createElement("div");
           empty.className = "trend-empty";
           empty.textContent = message;
           track.appendChild(empty);
         });
-
         return;
       }
 
       const items = getYearPriceDropItems();
+      const largestDrops = items.filter(item => item.rate < 0)
+        .sort((a, b) => a.rate - b.rate).slice(0, 10);
+      const largestIncreases = items.filter(item => item.rate > 0)
+        .sort((a, b) => b.rate - a.rate).slice(0, 10);
 
-      // 가장 많이 하락한 상품부터
-      const largestDrops = [...items]
-        .sort((a, b) => a.rate - b.rate)
-        .slice(0, 10);
-
-      // 가격 하락 폭이 작은 상품부터
-      const smallestDrops = [...items]
-        .sort((a, b) => b.rate - a.rate)
-        .slice(0, 10);
-
-      function fillTrack(track, products) {
+      function fillTrack(track, products, direction) {
         if (!products.length) {
           const empty = document.createElement("div");
           empty.className = "trend-empty";
-          empty.textContent =
-            "작년 대비 가격 하락을 확인할 수 있는 상품이 없습니다.";
+          empty.textContent = direction === "down"
+            ? "작년보다 저렴한 상품 데이터가 없습니다."
+            : "작년보다 비싼 상품 데이터가 없습니다.";
           track.appendChild(empty);
           return;
         }
-
-        products.forEach(item => {
-          track.appendChild(createTrendCard(item));
-        });
+        products.forEach(item => track.appendChild(createTrendCard(item, direction)));
       }
 
-      fillTrack(highTrack, largestDrops);
-      fillTrack(lowTrack, smallestDrops);
+      fillTrack(highTrack, largestDrops, "down");
+      fillTrack(lowTrack, largestIncreases, "up");
     }
 
-    // 배너별 좌우 슬라이드 버튼
-    document.querySelectorAll(".trend-prev, .trend-next")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          const track = document.getElementById(
-            button.dataset.target
-          );
-
-          if (!track) return;
-
-          const direction = button.classList.contains("trend-next")
-            ? 1
-            : -1;
-
-          track.scrollBy({
-            left: direction * track.clientWidth * 0.8,
-            behavior: "smooth"
-          });
-        });
+    // 가격 추천 카드 좌우 이동 버튼
+    document.querySelectorAll(".trend-prev, .trend-next").forEach(button => {
+      button.addEventListener("click", () => {
+        const track = document.getElementById(button.dataset.target);
+        if (!track) return;
+        const direction = button.classList.contains("trend-next") ? 1 : -1;
+        track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: "smooth" });
       });
-        // 작년 대비 가격 변동률이 있는 KAMIS 상품 찾기
-    function findYearComparePrice(foodName) {
-      const target = normalizeText(foodName);
+    });
 
-      const matches = state.prices.filter(row => {
-        const rowName = normalizeText(getItemName(row));
-
-        return rowName && (
-          rowName === target ||
-          rowName.includes(target) ||
-          target.includes(rowName)
-        );
-      });
-
-      // 작년 대비 변동률이 실제로 존재하는 상품만 사용
-      const validMatches = matches.filter(row => {
-        if (
-          row.pctYear === null ||
-          row.pctYear === undefined ||
-          String(row.pctYear).trim() === ""
-        ) {
-          return false;
-        }
-
-        const rate = Number(row.pctYear);
-
-        return Number.isFinite(rate) &&
-          parsePrice(getPriceValue(row)) !== null;
-      });
-
-      // 상품명이 정확히 일치하는 데이터 우선
-      return validMatches.find(row =>
-        normalizeText(getItemName(row)) === target
-      ) || validMatches[0] || null;
-    }
-
-    // 현재 월 제철 상품 중 작년 대비 가격이 하락한 상품 추출
-    function getYearPriceDropItems() {
-      if (!state.pricesLoaded) return [];
-
-      const seen = new Set();
-
-      return getMonthFoods()
-        .map(food => {
-          const [name, emoji, category] = food;
-          const row = findYearComparePrice(name);
-
-          if (!row) return null;
-
-          const rate = Number(row.pctYear);
-
-          // 가격 상승 또는 변동률이 0인 상품은 제외
-          if (!Number.isFinite(rate) || rate >= 0) {
-            return null;
-          }
-
-          // 상품 중복 노출 방지
-          const normalizedName = normalizeText(name);
-
-          if (seen.has(normalizedName)) return null;
-          seen.add(normalizedName);
-
-          return {
-            name,
-            emoji,
-            category,
-            row,
-            rate
-          };
-        })
-        .filter(Boolean);
-    }
-
-    // 가격 하락 배너 카드 생성
-    function createTrendCard(item) {
-      const card = document.createElement("article");
-      card.className = "trend-card";
-
-      const emoji = document.createElement("div");
-      emoji.className = "trend-emoji";
-      emoji.textContent = item.emoji;
-      emoji.setAttribute("aria-hidden", "true");
-
-      const name = document.createElement("h4");
-      name.className = "trend-name";
-      name.textContent = item.name;
-
-      const rate = document.createElement("div");
-      rate.className = "trend-rate";
-
-      const rateNumber = Math.abs(item.rate).toFixed(1);
-
-      rate.textContent = `▼ ${rateNumber}%`;
-
-      const rateCaption = document.createElement("span");
-      rateCaption.textContent = " 작년 대비";
-      rate.appendChild(rateCaption);
-
-      const price = document.createElement("div");
-      price.className = "trend-price";
-
-      const currentPrice = parsePrice(getPriceValue(item.row));
-      const unit = item.row.unit ? ` / ${item.row.unit}` : "";
-
-      price.textContent = currentPrice !== null
-        ? `현재 ${formatPrice(currentPrice)}원${unit}`
-        : "현재 가격 정보 없음";
-
-      card.append(emoji, name, rate, price);
-
-      return card;
-    }
-
-    // 하락률이 큰 상품과 작은 상품을 각각 슬라이드로 표시
-    function renderYearPriceTrends() {
-      const highTrack = $("#trendHighTrack");
-      const lowTrack = $("#trendLowTrack");
-
-      if (!highTrack || !lowTrack) return;
-
-      highTrack.replaceChildren();
-      lowTrack.replaceChildren();
-
-      if (!state.pricesLoaded) {
-        const message = state.error
-          ? "가격 데이터를 확인할 수 없습니다."
-          : "가격 정보를 불러오는 중입니다.";
-
-        [highTrack, lowTrack].forEach(track => {
-          const empty = document.createElement("div");
-          empty.className = "trend-empty";
-          empty.textContent = message;
-          track.appendChild(empty);
-        });
-
-        return;
-      }
-
-      const items = getYearPriceDropItems();
-
-      // 가장 많이 하락한 상품부터
-      const largestDrops = [...items]
-        .sort((a, b) => a.rate - b.rate)
-        .slice(0, 10);
-
-      // 가격 하락 폭이 작은 상품부터
-      const smallestDrops = [...items]
-        .sort((a, b) => b.rate - a.rate)
-        .slice(0, 10);
-
-      function fillTrack(track, products) {
-        if (!products.length) {
-          const empty = document.createElement("div");
-          empty.className = "trend-empty";
-          empty.textContent =
-            "작년 대비 가격 하락을 확인할 수 있는 상품이 없습니다.";
-          track.appendChild(empty);
-          return;
-        }
-
-        products.forEach(item => {
-          track.appendChild(createTrendCard(item));
-        });
-      }
-
-      fillTrack(highTrack, largestDrops);
-      fillTrack(lowTrack, smallestDrops);
-    }
-
-    // 배너별 좌우 슬라이드 버튼
-    document.querySelectorAll(".trend-prev, .trend-next")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          const track = document.getElementById(
-            button.dataset.target
-          );
-
-          if (!track) return;
-
-          const direction = button.classList.contains("trend-next")
-            ? 1
-            : -1;
-
-          track.scrollBy({
-            left: direction * track.clientWidth * 0.8,
-            behavior: "smooth"
-          });
-        });
-      });
     function getChangeInfo(row) {
       if (!row) {
         return {
@@ -1319,7 +1103,15 @@
       };
     }
     function getMonthFoods() {
-      return seasonalFoods[state.month] || [];
+      if (!Array.isArray(seasonalFoods)) return [];
+      return seasonalFoods
+        .filter(food => Array.isArray(food.months) && food.months.includes(state.month))
+        .map(food => [
+          food.name,
+          getFoodEmoji(food.name, food.category),
+          food.category || "농산물",
+          food.description || ""
+        ]);
     }
     function renderStatus() {
       apiStatus.classList.remove("success", "error");
@@ -1473,7 +1265,7 @@
         `${state.month}월 제철 식재료`;
 
       renderProducts();
-      renderYearPriceTrends();
+      // 가격 추천 영역은 월 이동과 무관하게 고정합니다.
     }
     function moveMonth(amount) {
       let nextMonth = state.month + amount;
