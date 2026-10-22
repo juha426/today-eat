@@ -538,6 +538,10 @@
     }
     .trend-panel-low .trend-rate.up { color: #b84235; }
     .trend-panel-high .trend-rate.down { color: #337c53; }
+    .trend-panel { display: flex; flex-direction: column; }
+    .trend-track { min-height: 150px; align-items: stretch; }
+    .trend-card { flex-basis: 125px; }
+    .trend-empty { align-self: center; }
     .trend-card { overflow-wrap: anywhere; }
     .trend-name { white-space: normal; overflow-wrap: anywhere; }
     .trend-rate { line-height: 1.35; }
@@ -819,8 +823,106 @@
     </div>
   </footer>
   
-  <script src="./data/seasonal-foods.js"></script>
-  
+  <script>
+// 오늘뭐먹지 - 월별 제철 상품 데이터
+// 사용 방법: index.html에서 이 파일을 index.html보다 먼저 불러오거나,
+// 기존 index.html의 seasonalFoods 배열을 이 데이터로 교체하세요.
+// months는 해당 상품을 노출할 월(1~12)입니다.
+// 제철 시기는 산지·품종·기후에 따라 달라질 수 있으며, 이 데이터는 사이트 운영용 기본 목록입니다.
+
+const seasonalFoods = [
+  // 과일
+  { name: "딸기", category: "농산물", months: [1, 2, 3, 4], description: "겨울부터 봄까지 즐기기 좋은 과일" },
+  { name: "감귤", category: "농산물", months: [11, 12, 1, 2], description: "겨울철 대표 감귤류" },
+  { name: "한라봉", category: "농산물", months: [1, 2, 3], description: "향이 진한 만감류" },
+  { name: "천혜향", category: "농산물", months: [2, 3, 4], description: "향긋하고 과즙이 풍부한 만감류" },
+  { name: "참외", category: "농산물", months: [4, 5, 6, 7], description: "봄부터 여름까지 즐기는 과일" },
+  { name: "수박", category: "농산물", months: [6, 7, 8], description: "여름철 대표 과일" },
+  { name: "복숭아", category: "농산물", months: [6, 7, 8], description: "여름철 향긋한 과일" },
+  { name: "자두", category: "농산물", months: [6, 7, 8], description: "새콤달콤한 여름 과일" },
+  { name: "포도", category: "농산물", months: [7, 8, 9, 10], description: "여름부터 가을까지 즐기는 과일" },
+  { name: "사과", category: "농산물", months: [9, 10, 11, 12, 1], description: "가을부터 겨울까지 대표적인 과일" },
+  { name: "배", category: "농산물", months: [9, 10, 11, 12], description: "수분이 풍부한 가을 과일" },
+  { name: "감", category: "농산물", months: [9, 10, 11, 12], description: "가을철 대표 과일" },
+  { name: "유자", category: "농산물", months: [10, 11, 12], description: "향이 풍부한 늦가을·겨울 과일" },
+
+  // 채소·나물·곡류·버섯
+  { name: "봄동", category: "농산물", months: [1, 2, 3], description: "겨울을 지나 봄에 즐기는 배추류" },
+  { name: "시금치", category: "농산물", months: [1, 2, 11, 12], description: "겨울철 단맛이 좋은 잎채소" },
+  { name: "무", category: "농산물", months: [1, 2, 10, 11, 12], description: "국과 반찬에 두루 쓰이는 뿌리채소" },
+  { name: "배추", category: "농산물", months: [1, 2, 10, 11, 12], description: "김치와 국에 활용하기 좋은 채소" },
+  { name: "연근", category: "농산물", months: [1, 2, 11, 12], description: "조림과 볶음에 활용하기 좋은 뿌리채소" },
+  { name: "냉이", category: "농산물", months: [2, 3, 4], description: "봄 향이 좋은 대표 나물" },
+  { name: "달래", category: "농산물", months: [2, 3, 4], description: "알싸한 향이 특징인 봄나물" },
+  { name: "쑥", category: "농산물", months: [3, 4], description: "국과 떡 등에 활용하는 봄나물" },
+  { name: "미나리", category: "농산물", months: [3, 4, 5], description: "향긋하게 즐기는 봄 채소" },
+  { name: "두릅", category: "농산물", months: [4, 5], description: "봄철 대표 산나물" },
+  { name: "참나물", category: "농산물", months: [3, 4, 5], description: "향긋한 봄나물" },
+  { name: "취나물", category: "농산물", months: [3, 4, 5], description: "봄철에 즐기는 향긋한 나물" },
+  { name: "아스파라거스", category: "농산물", months: [4, 5, 6], description: "볶음과 구이에 잘 어울리는 채소" },
+  { name: "완두콩", category: "농산물", months: [4, 5, 6], description: "봄부터 초여름까지 즐기는 콩류" },
+  { name: "오이", category: "농산물", months: [5, 6, 7, 8], description: "수분이 풍부한 여름 채소" },
+  { name: "토마토", category: "농산물", months: [5, 6, 7, 8], description: "생식과 조리에 두루 쓰이는 채소" },
+  { name: "매실", category: "농산물", months: [5, 6], description: "청과 음료 등에 활용하는 초여름 과실" },
+  { name: "마늘종", category: "농산물", months: [4, 5, 6], description: "볶음 반찬에 활용하는 마늘의 꽃줄기" },
+  { name: "양파", category: "농산물", months: [5, 6, 7], description: "다양한 요리의 기본 재료" },
+  { name: "감자", category: "농산물", months: [5, 6, 7], description: "초여름부터 수확하는 대표 뿌리작물" },
+  { name: "옥수수", category: "농산물", months: [6, 7, 8], description: "여름철 간식으로 즐기는 곡류" },
+  { name: "풋고추", category: "농산물", months: [6, 7, 8, 9], description: "여름철 반찬과 요리에 활용하는 고추" },
+  { name: "애호박", category: "농산물", months: [6, 7, 8, 9], description: "볶음과 찌개에 활용하기 좋은 채소" },
+  { name: "고구마", category: "농산물", months: [8, 9, 10, 11], description: "늦여름부터 가을까지 수확하는 뿌리작물" },
+  { name: "밤", category: "농산물", months: [9, 10, 11], description: "가을철 대표 견과류" },
+  { name: "땅콩", category: "농산물", months: [9, 10], description: "가을에 수확하는 견과 작물" },
+  { name: "단호박", category: "농산물", months: [8, 9, 10, 11], description: "달콤한 맛이 특징인 호박" },
+  { name: "버섯류", category: "농산물", months: [9, 10, 11], description: "가을 요리에 활용하기 좋은 버섯" },
+  { name: "브로콜리", category: "농산물", months: [10, 11, 12, 1, 2], description: "볶음과 찜에 활용하기 좋은 채소" },
+  { name: "늙은호박", category: "농산물", months: [10, 11, 12], description: "죽과 국 등에 활용하는 늦가을 호박" },
+
+  // 수산물
+  { name: "굴", category: "수산물", months: [10, 11, 12, 1, 2], description: "찬 계절에 많이 찾는 패류" },
+  { name: "홍합", category: "수산물", months: [10, 11, 12, 1, 2], description: "국물 요리에 잘 어울리는 패류" },
+  { name: "꼬막", category: "수산물", months: [11, 12, 1, 2], description: "겨울철 별미로 즐기는 패류" },
+  { name: "과메기", category: "수산물", months: [11, 12, 1, 2], description: "겨울철 대표 수산 가공식품" },
+  { name: "명태", category: "수산물", months: [12, 1, 2], description: "탕과 찜 등에 활용하는 생선" },
+  { name: "대구", category: "수산물", months: [11, 12, 1, 2], description: "겨울철 탕 요리에 많이 쓰이는 생선" },
+  { name: "아귀", category: "수산물", months: [12, 1, 2, 3], description: "찜과 탕으로 즐기는 생선" },
+  { name: "삼치", category: "수산물", months: [10, 11, 12, 1, 2], description: "구이로 즐기기 좋은 생선" },
+  { name: "바지락", category: "수산물", months: [2, 3, 4, 5], description: "국과 칼국수 등에 활용하는 조개" },
+  { name: "도미", category: "수산물", months: [2, 3, 4], description: "봄철에 많이 찾는 흰살생선" },
+  { name: "주꾸미", category: "수산물", months: [3, 4], description: "봄철 대표 수산물" },
+  { name: "도다리", category: "수산물", months: [3, 4, 5], description: "봄철에 많이 찾는 생선" },
+  { name: "멍게", category: "수산물", months: [3, 4, 5], description: "향긋한 바다 향이 특징인 해산물" },
+  { name: "소라", category: "수산물", months: [3, 4, 5], description: "삶거나 무쳐 먹는 해산물" },
+  { name: "키조개", category: "수산물", months: [3, 4, 5], description: "관자를 구이와 볶음으로 즐기는 패류" },
+  { name: "꽃게", category: "수산물", months: [4, 5, 8, 9, 10], description: "봄과 가을에 많이 찾는 갑각류" },
+  { name: "병어", category: "수산물", months: [4, 5, 6], description: "구이와 조림으로 즐기는 생선" },
+  { name: "장어", category: "수산물", months: [5, 6, 7, 8], description: "여름철 보양식으로 많이 찾는 수산물" },
+  { name: "갑오징어", category: "수산물", months: [4, 5, 6], description: "봄부터 초여름에 많이 찾는 두족류" },
+  { name: "다슬기", category: "수산물", months: [5, 6, 7], description: "국과 해장국 등에 활용하는 민물 고둥" },
+  { name: "갈치", category: "수산물", months: [6, 7, 8, 9, 10], description: "구이와 조림으로 즐기는 생선" },
+  { name: "농어", category: "수산물", months: [6, 7, 8], description: "여름철에 많이 찾는 흰살생선" },
+  { name: "전복", category: "수산물", months: [6, 7, 8], description: "찜과 죽 등에 활용하는 패류" },
+  { name: "성게", category: "수산물", months: [6, 7, 8], description: "여름철에 많이 찾는 해산물" },
+  { name: "민어", category: "수산물", months: [6, 7, 8], description: "여름철 보양식으로 알려진 생선" },
+  { name: "문어", category: "수산물", months: [7, 8], description: "숙회와 볶음 등에 활용하는 두족류" },
+  { name: "오징어", category: "수산물", months: [7, 8, 9], description: "볶음과 무침 등에 활용하는 수산물" },
+  { name: "대하", category: "수산물", months: [9, 10], description: "가을철 대표 새우류" },
+  { name: "전어", category: "수산물", months: [8, 9, 10], description: "가을철 대표 생선" },
+  { name: "고등어", category: "수산물", months: [9, 10, 11], description: "구이와 조림으로 즐기는 등푸른생선" },
+  { name: "낙지", category: "수산물", months: [9, 10, 11], description: "볶음과 탕 등에 활용하는 두족류" },
+  { name: "새우", category: "수산물", months: [9, 10, 11], description: "구이와 볶음 등에 활용하는 갑각류" },
+  { name: "방어", category: "수산물", months: [11, 12, 1, 2], description: "겨울철에 많이 찾는 기름진 생선" },
+  { name: "가리비", category: "수산물", months: [11, 12, 1, 2], description: "구이와 찜으로 즐기는 패류" },
+  { name: "도루묵", category: "수산물", months: [11, 12], description: "늦가을과 겨울에 많이 찾는 생선" },
+  { name: "임연수어", category: "수산물", months: [2, 3, 4], description: "구이로 즐기기 좋은 생선" },
+  { name: "숭어", category: "수산물", months: [3, 4], description: "봄철에 찾는 생선" }
+];
+
+// 현재 월의 상품만 가져올 때 사용:
+// const currentMonth = new Date().getMonth() + 1;
+// const currentMonthFoods = seasonalFoods.filter(food => food.months.includes(currentMonth));
+
+  </script>
   <script>
     "use strict";
     /*
@@ -1134,7 +1236,7 @@
         statusTitle.textContent = "실제 가격을 불러오지 못했습니다.";
         statusMessage.textContent =
           `${state.error} 예시 가격은 표시하지 않습니다. 가격 파일의 주소와 GitHub Actions 실행 결과를 확인해 주세요.`;
-      } else if (state.pricesLoaded) {
+      } else if (state.pricesLoaded && !state.error) {
         apiStatus.classList.add("success");
         statusTitle.textContent = "가격 정보 조회 완료";
         const updatedText = state.updatedAt
@@ -1239,7 +1341,20 @@
       return card;
     }
     function renderProducts() {
-      const filtered = getMonthFoods().filter(food => {
+      const monthFoods = getMonthFoods();
+      if (!monthFoods.length) {
+        grid.replaceChildren();
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        const title = document.createElement("strong");
+        title.textContent = "제철 식재료 목록을 확인할 수 없습니다.";
+        const message = document.createElement("span");
+        message.textContent = "HTML에 포함된 월별 식재료 데이터를 확인해 주세요.";
+        empty.append(title, message);
+        grid.appendChild(empty);
+        return;
+      }
+      const filtered = monthFoods.filter(food => {
         const [name, , category] = food;
         const categoryMatches =
           state.category === "all" ||
@@ -1321,26 +1436,28 @@
           );
         }
         const payload = await response.json();
-        if (payload.success !== true) {
-          throw new Error(
-            "가격 데이터가 정상적으로 생성되지 않았습니다."
-          );
+        // GitHub Actions 생성 JSON과 KAMIS 응답 래핑 형식을 모두 읽습니다.
+        let sourceRows = [];
+        if (Array.isArray(payload)) sourceRows = payload;
+        else if (Array.isArray(payload.items)) sourceRows = payload.items;
+        else if (Array.isArray(payload.data)) sourceRows = payload.data;
+        else if (Array.isArray(payload.data?.items)) sourceRows = payload.data.items;
+        else if (Array.isArray(payload.data?.item)) sourceRows = payload.data.item;
+        else if (Array.isArray(payload.item)) sourceRows = payload.item;
+
+        if (payload.success === false || payload.error) {
+          throw new Error(payload.message || payload.error || "가격 데이터 생성에 실패했습니다.");
         }
-        if (!Array.isArray(payload.items)) {
-          throw new Error(
-            "가격 데이터의 상품 목록을 확인할 수 없습니다."
-          );
+        if (!sourceRows.length) {
+          throw new Error("가격 JSON에 상품 목록이 없습니다. data/prices.json의 구조를 확인해 주세요.");
         }
-        const rows = payload.items.filter(row => {
-          return getItemName(row) &&
-            parsePrice(getPriceValue(row)) !== null;
-        });
+        const rows = sourceRows.filter(row => getItemName(row));
         state.prices = rows;
         state.pricesLoaded = true;
-        state.updatedAt = payload.updatedAt ?? null;
-        if (rows.length === 0) {
-          state.error =
-            "가격 파일은 읽었지만 유효한 가격 데이터가 없습니다.";
+        state.updatedAt = payload.updatedAt ?? payload.condition?.regday ?? null;
+        const usableRows = rows.filter(row => parsePrice(getPriceValue(row)) !== null);
+        if (usableRows.length === 0) {
+          state.error = "상품 목록은 읽었지만 실제 가격 필드를 찾지 못했습니다. JSON의 price 또는 dpr1 필드를 확인해 주세요.";
         }
       } catch (error) {
         state.prices = [];
