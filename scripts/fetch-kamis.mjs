@@ -61,7 +61,7 @@ async function fetchCategory(category) {
     p_item_category_code: category.code,
     p_country_code: "1101",
     p_regday: getKoreaDate(),
-    p_convert_kg_yn: "Y"
+    p_convert_kg_yn: "N"
   });
   const response = await fetch(
     `${API_URL}?${params}`
@@ -131,8 +131,8 @@ async function fetchCategory(category) {
         pctDay: current == null
           ? null
           : changeRate(current, previousDay),
-        pctWeek: changeRate(displayPrice, weekAgo),
-        pctYear: changeRate(displayPrice, yearAgo),
+        pctWeek: changeRate(current, weekAgo),
+        pctYear: changeRate(current, yearAgo),
         asOf: row.day1 ?? null,
         previousDayLabel: row.day2 ?? null,
         weekAgoLabel: row.day3 ?? null,
@@ -163,7 +163,7 @@ async function main() {
     updatedAt: new Date().toISOString(),
     priceType: "retail",
     region: "서울",
-    unitPolicy: "KAMIS kg 환산 요청",
+    unitPolicy: "KAMIS 조사 단위 유지 (kg 환산 안 함)",
     items: allItems
   };
   const fs = await import("node:fs/promises");
