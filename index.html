@@ -1062,33 +1062,71 @@ const seasonalFoods = [
       return category === "수산물" || /수산|어류|해산/.test(String(category)) ? "🐟" : "🥗";
     }
 
-    // 작년 대비 가격 비교가 가능한 상품을 월별 제철 목록과 무관하게 추립니다.
-    function getYearPriceDropItems() {
-      if (!state.pricesLoaded) return [];
-      const byName = new Map();
+   
+function getYearPriceDropItems() {
+  if (!state.pricesLoaded || !Array.isArray(state.prices)) {
+    return [];
+  }
 
-      state.prices.forEach(row => {
-        const name = String(getItemName(row) || "").trim();
-        const rateRaw = row.pctYear;
-        const rate = Number(rateRaw);
-        const price = parsePrice(getPriceValue(row));
-        if (!name || price === null || rateRaw === null || rateRaw === undefined || String(rateRaw).trim() === "" || !Number.isFinite(rate)) return;
+  const byName = new Map();
 
-        const key = normalizeText(name);
-        const item = {
-          name,
-          emoji: getFoodEmoji(name, row.category || getCategoryForFood(name)),
-          category: row.category || getCategoryForFood(name),
-          row,
-          rate
-        };
-        const previous = byName.get(key);
-        // 중복 규격이 있으면 정확한 품목명과 유효한 연간 변동률이 있는 첫 항목을 사용합니다.
-        if (!previous || normalizeText(getItemName(row)) === key) byName.set(key, item);
-      });
+  state.prices.forEach(row => {
+    const name = String(getItemName(row) || "").trim();
+    const currentPrice = parsePrice(getPriceValue(row));
 
-      return Array.from(byName.values());
+    // 작년 가격: JSON에 실제 존재하는 필드 사용
+    const yearAgoPrice = parsePrice(
+      row.priceYearAgo ??
+      row.price_year_ago ??
+      row.dpr6 ??
+      row.yearAgoPrice ??
+      row.year_ago_price
+    );
+
+    if (!name || currentPrice === null) return;
+
+    // 1. 저장된 연간 변동률 우선 사용
+    const rawRate = row.pctYear;
+    let rate = null;
+
+    if (
+      rawRate !== null &&
+      rawRate !== undefined &&
+      String(rawRate).trim() !== "" &&
+      Number.isFinite(Number(rawRate))
+    ) {
+      rate = Number(rawRate);
+    } else if (yearAgoPrice !== null && yearAgoPrice > 0) {
+      // 2. 변동률이 없으면 작년 가격으로 계산
+      rate =
+        ((currentPrice - yearAgoPrice) / yearAgoPrice) * 100;
     }
+
+    // 비교할 자료가 없으면 추천 목록에서 제외
+    if (!Number.isFinite(rate)) return;
+
+    const key = normalizeText(name);
+
+    const item = {
+      name,
+      emoji: getFoodEmoji(
+        name,
+        row.category || getCategoryForFood(name)
+      ),
+      category: row.category || getCategoryForFood(name),
+      row,
+      rate
+    };
+
+    // 동일한 상품명은 한 번만 표시
+    if (!byName.has(key)) {
+      byName.set(key, item);
+    }
+  });
+
+  return Array.from(byName.values());
+}
+
 
     function createTrendCard(item, direction) {
       const card = document.createElement("article");
